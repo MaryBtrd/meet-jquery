@@ -45,5 +45,5 @@ window.addEventListener( "load", function(){
    } );
    $TrombinoFigures = Array.from(document.querySelectorAll("#trombino figure"));
    iTrombinoLength = $TrombinoFigures.length;
-   setInterval( fUpdateTrombino, 1000 );
+   setInterval( fUpdateTrombino, 1500 );
  } );
