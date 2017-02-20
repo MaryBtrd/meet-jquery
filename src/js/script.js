@@ -34,7 +34,7 @@ const fHandleTrombino = function(){
 
 const fHandleFormValidation = function(oEvent){
   let bHasErrors = false,
-    sEmail;
+      sEmail, sName, sComment;
   //1. check email
   sEmail = ($emailInput.val() || "").trim();
   if( !rEmailValidation.test( sEmail ) ){
@@ -46,9 +46,29 @@ const fHandleFormValidation = function(oEvent){
   //console.log("email:", $emailInput.val() );
 
   //2. check name
+  sName = ( $nameInupt.val() || "").trim();
+  if (sName.length < 4) {
+    console.error("Name is not valid!");
+    bHasErrors = true;
+  }else {
+    console.info("Name is valid!");
+  }
 
+  //3. check comment
 
-  return false; /*événement ne continue pas (Form non validé)*/
+  sComment = ($commentTextarea.val() || "").trim();
+  if (sComment.length <10 || sComment.length > 140 ){
+    console.error("Textearea is not valid!");
+    bHasErrors = true;
+  } else {
+    console.info("Textearea is valid!");
+  }
+
+  if (bHasErrors){
+    window.alert("veuillez remplir tous les champs de formulaire!");
+    return false;
+  }
+  return true;
 };
 
 
