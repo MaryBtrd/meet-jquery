@@ -5,8 +5,8 @@
  * coded by leny@flatLand!
  * started at 13/02/2017
  */
-
-let $tabs, $trombinoFigures;
+const rEmailValidation = /([\w-\.]+)@((?:[\w]+\.)+)([a-z]{2,})/i;
+let $tabs, $trombinoFigures, $commentForm, $emailInput, $nameInupt, $commentTextarea;
 
 const fHandleTab = function( oEvent ) {
     let $this = $( this );
@@ -31,13 +31,34 @@ const fHandleTrombino = function(){
   } );
 }
 
+
+const fHandleFormValidation = function(oEvent){
+  let bHasErrors = false,
+    sEmail;
+  //1. check email
+  sEmail = ($emailInput.val() || "").trim();
+  if( !rEmailValidation.test( sEmail ) ){
+    console.error("Email isn't valid!" );
+    bHasErrors = true;
+  } else{
+  console.info ("Email i valid!");
+  }
+  //console.log("email:", $emailInput.val() );
+
+  //2. check name
+
+
+  return false; /*événement ne continue pas (Form non validé)*/
+};
+
+
 $( function() {
 
     // 1. a with rel=external
     $( 'a[rel*="external"]' ).attr( "target", "_new" );
 
     // 2. tabs
-  / $( "ul.nav.nav-tabs a" ).on( "click", fHandleTab );
+   $( "ul.nav.nav-tabs a" ).on( "click", fHandleTab );
 
     // 3. trombinoscope
 
@@ -45,4 +66,11 @@ $( function() {
     $trombinoFigures.hide().first().show();
     setInterval( fHandleTrombino, 1000 );
 
+    // 4. handle form validation
+
+    $commentForm = $ ("form" );
+    $emailInput = $( "#inputEmail");
+    $nameInupt = $("#inputName");
+    $commentTextarea = $("#inputComment")
+    $commentForm.on( "submit", fHandleFormValidation);
 } );
