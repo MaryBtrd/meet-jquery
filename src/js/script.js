@@ -6,7 +6,7 @@
  * started at 13/02/2017
  */
 const rEmailValidation = /([\w-\.]+)@((?:[\w]+\.)+)([a-z]{2,})/i;
-let $tabs, $trombinoFigures, $commentForm, $emailInput, $nameInupt, $commentTextarea;
+let $tabs, $trombinoFigures, $commentForm, $emailInput, $nameInput, $commentTextarea;
 
 const fHandleTab = function( oEvent ) {
     let $this = $( this );
@@ -31,9 +31,45 @@ const fHandleTrombino = function(){
   } );
 }
 
+const fCheckEmail = function(){
+  let sEmail = ($emailInput.val() || "").trim(),
+      bIsValid = rEmailValidation.test(sEmail);
+  $emailInput.parents( ".control-group").toggleClass("error", !bIsValid);
+  return bIsValid;
+};
+const fCheckName = function(){
+  let sName = ($nameInput.val() || "").trim(),
+      bIsValid = sName.length < 4;
+  $nameInput.parents( ".control-group").toggleClass("error", bIsValid);
+  return bIsValid;
+};
+const fCheckComment = function(){
+  let sComment = ($commentTextarea.val() || "").trim(),
+      bIsValid = sComment.length <10 || sComment.length > 140;
+  $commentTextarea.parents( ".control-group").toggleClass("error", bIsValid);
+  return bIsValid;
+};
 
-const fHandleFormValidation = function(oEvent){
-  let bHasErrors = false,
+const fHandleFormValidation = function(){
+  let aChecks = [ fCheckEmail(), fCheckName(), fCheckComment()],
+    bAllIsOk;
+
+  bAllIsOk = aChecks.reduce( function( bPrevious, bCurrent ){
+    return bPrevious && bCurrent;
+  },true);
+
+  if ( bAllIsOk ){
+    return true;
+  }
+
+    /*if( fCheckEmail() && fCheckName() && fCheckComment() ){
+      return true;
+    }*/
+
+    window.alert("veuillez remplir correctement les champs du formulaire!");
+    return false;
+};
+/*  let bHasErrors = false,
       sEmail, sName, sComment;
   //1. check email
   sEmail = ($emailInput.val() || "").trim();
@@ -46,7 +82,7 @@ const fHandleFormValidation = function(oEvent){
   //console.log("email:", $emailInput.val() );
 
   //2. check name
-  sName = ( $nameInupt.val() || "").trim();
+  sName = ( $nameInput.val() || "").trim();
   if (sName.length < 4) {
     console.error("Name is not valid!");
     bHasErrors = true;
@@ -71,7 +107,7 @@ const fHandleFormValidation = function(oEvent){
   return true;
 };
 
-
+*/
 $( function() {
 
     // 1. a with rel=external
@@ -90,7 +126,10 @@ $( function() {
 
     $commentForm = $ ("form" );
     $emailInput = $( "#inputEmail");
-    $nameInupt = $("#inputName");
-    $commentTextarea = $("#inputComment")
+    $emailInput.on("blur", fCheckEmail); //blur => événement qui se produit au lâché du focus
+    $nameInput = $("#inputName");
+    $nameInput.on("blur", fCheckName);
+    $commentTextarea = $("#inputComment");
+    $commentTextarea.on("blur", fCheckComment);
     $commentForm.on( "submit", fHandleFormValidation);
 } );
