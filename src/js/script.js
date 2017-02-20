@@ -1,21 +1,48 @@
-/*Mary/Mett-jQuerry
+/* leny/meet-jquery
+ *
+ * /src/js/script.js - Main script (jQuery Version)
+ *
+ * coded by leny@flatLand!
+ * started at 13/02/2017
+ */
 
-*/
-const fChangeTab = function( oEvent ) {
-  oEvent.preventDefault();
+let $tabs, $trombinoFigures;
 
-  $tabs.parent().filter( ".active" ).removeClass( "active" );
-  $( this ).parent().addClass ( "active" );
-  $( ".tab-content .tab-pane.active" ).removeClass( "active" );
-  $( `#${ $( this ).data( "tab-target" )}` ).addClass( "active" );
+const fHandleTab = function( oEvent ) {
+    let $this = $( this );
+
+    oEvent.preventDefault();
+    if ( $this.parent().hasClass( "active" ) ) {
+        return;
+    }
+    $( "ul.nav.nav-tabs .active" ).removeClass( "active" );
+    $this.parent().addClass( "active" );
+    $( ".tab-pane.active" ).removeClass( "active" );
+    $( `#${ $this.data( "tab-target" ) }` ).addClass( "active" );
 };
 
-//called when DOM is ready.
-$( function () {
+const fHandleTrombino = function(){
+  $trombinoFigures.filter(":visible").fadeOut( function(){
+    let $next = $(this).next();
+  if( $next.length === 0){
+    $next = $trombinoFigures.first();
+    }
+    $next.fadeIn();
+  } );
+}
 
-  //1. link with rel=external
-  $( 'a[rel*="external"]' ).Attr( "target", "_new");
+$( function() {
 
-  //2. tab
-  ( $tabs = $( "ul.nav.nav-tabs a" )).on( "click", fChangeTab );
+    // 1. a with rel=external
+    $( 'a[rel*="external"]' ).attr( "target", "_new" );
+
+    // 2. tabs
+  / $( "ul.nav.nav-tabs a" ).on( "click", fHandleTab );
+
+    // 3. trombinoscope
+
+    $trombinoFigures = $( "#trombino figure");
+    $trombinoFigures.hide().first().show();
+    setInterval( fHandleTrombino, 1000 );
+
 } );

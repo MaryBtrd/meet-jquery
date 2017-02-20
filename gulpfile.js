@@ -1,4 +1,4 @@
-/* leny/katbizniss
+/* leny/meet-jquery
  *
  * /gulpfile.js - Gulp tasks
  *
@@ -8,7 +8,6 @@
 
 var gulp = require( "gulp" ),
     babel = require( "gulp-babel" );
-
 
 // --- Task for js
 
